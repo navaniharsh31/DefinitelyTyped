@@ -478,7 +478,23 @@ new Tagify<TagData, "mix">(inputElement, { mode: "select", });
 new Tagify<TagData, "mix">(inputElement, { mode: undefined, });
 // @ts-expect-error
 new Tagify<TagData, "select">(inputElement, { mode: null, });
-const modeTagifyNormal = new Tagify(inputElement, {
+
+// $ExpectType Tagify<TagData, undefined>
+const modeTagifyUndefined = new Tagify(inputElement, {
+    mode: undefined,
+    callbacks: {
+        input: event => {
+            // $ExpectType Tagify<TagData, undefined>
+            event.detail.tagify;
+            // $ExpectType HTMLInputElement | HTMLTextAreaElement
+            event.detail.inputElm;
+            // $ExpectType string
+            event.detail.value;
+        },
+    },
+});
+// $ExpectType Tagify<TagData, null>
+const modeTagifyNull = new Tagify(inputElement, {
     mode: null,
     callbacks: {
         input: event => {
@@ -491,6 +507,7 @@ const modeTagifyNormal = new Tagify(inputElement, {
         },
     },
 });
+// $ExpectType Tagify<TagData, "select">
 const modeTagifySelect = new Tagify(inputElement, {
     mode: "select",
     callbacks: {
@@ -504,6 +521,7 @@ const modeTagifySelect = new Tagify(inputElement, {
         },
     },
 });
+// $ExpectType Tagify<TagData, "mix">
 const modeTagifyMix = new Tagify(inputElement, {
     mode: "mix",
     callbacks: {
@@ -927,7 +945,16 @@ tagify.off('dropdown:select', (event) => {
     event.detail.elm;
 });
 
-modeTagifyNormal.on("input", ({ detail }) => {
+modeTagifyUndefined.on("input", ({ detail }) => {
+    // $ExpectType Tagify<TagData, undefined>
+    detail.tagify;
+    // $ExpectType HTMLInputElement | HTMLTextAreaElement
+    detail.inputElm;
+    // $ExpectType string
+    detail.value;
+});
+
+modeTagifyNull.on("input", ({ detail }) => {
     // $ExpectType Tagify<TagData, null>
     detail.tagify;
     // $ExpectType HTMLInputElement | HTMLTextAreaElement
