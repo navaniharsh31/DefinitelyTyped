@@ -147,7 +147,7 @@ export function TestTagsOnCallbacks(): React.ReactElement {
                 e.detail;
             }}
             onInput={e => {
-                // $ExpectType InputEventData<TagData, TagifyMode> | InputEventDataMix<TagData, TagifyMode>
+                // $ExpectType InputEventDataOther<TagData, TagifyMode>
                 e.detail;
             }}
             onInvalid={e => {
@@ -238,59 +238,56 @@ export function TestTagsMode(): React.ReactElement {
     return (<div>
         <Tags<ValueTagData, undefined> value={[John]} />
         <Tags<ValueTagData, undefined> value={[John]} settings={{}} />
-        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: undefined}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: null}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: "select"}} />
-        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, undefined> value={[John]} settings={{ mode: undefined }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, undefined> value={[John]} settings={{ mode: null }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, undefined> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, undefined> value={[John]} settings={{ mode: "select" }} />
+        { /* @ts-expect-error */}
         <Tags<ValueTagData, "mix"> value={[John]} />
-        { /* @ts-expect-error */ }
+        { /* @ts-expect-error */}
         <Tags<ValueTagData, "mix"> value={[John]} settings={{}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: undefined}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: null}} />
-        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: "select"}} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{ mode: undefined }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{ mode: null }} />
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{ mode: "select" }} />
 
         <Tags<ValueTagData, "mix" | undefined> value={[John]} />
         <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{}} />
-        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: undefined}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: null}} />
-        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "select"}} />
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: undefined }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: null }} />
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: "select" }} />
 
-        { /* @ts-expect-error */ }
+        { /* @ts-expect-error */}
         <Tags<ValueTagData, null> value={[John]} />
-        { /* @ts-expect-error */ }
+        { /* @ts-expect-error */}
         <Tags<ValueTagData, null> value={[John]} settings={{}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, null> value={[John]} settings={{mode: undefined}} />
-        <Tags<ValueTagData, null> value={[John]} settings={{mode: null}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, null> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <Tags<ValueTagData, null> value={[John]} settings={{mode: "select"}} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, null> value={[John]} settings={{ mode: undefined }} />
+        <Tags<ValueTagData, null> value={[John]} settings={{ mode: null }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, null> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <Tags<ValueTagData, null> value={[John]} settings={{ mode: "select" }} />
 
         <Tags<ValueTagData>
             onInput={e => {
                 // $ExpectType ValueTagData[]
                 e.detail.tagify.value;
-                if ("textContent" in e.detail) {
-                    // $ExpectType string
-                    e.detail.textContent;
-                } else {
-                    // $ExpectType HTMLInputElement | HTMLTextAreaElement
-                    e.detail.inputElm;
-                    // $ExpectType string
-                    e.detail.value;
-                }
+                // $ExpectType string | undefined
+                e.detail.textContent;
+                // $ExpectType HTMLInputElement | HTMLTextAreaElement | undefined
+                e.detail.inputElm;
+                // $ExpectType string | undefined
+                e.detail.value;
             }}
             value={[John]}
         />
@@ -299,6 +296,8 @@ export function TestTagsMode(): React.ReactElement {
             onInput={e => {
                 // $ExpectType ValueTagData[]
                 e.detail.tagify.value;
+                // @ts-expect-error
+                e.detail.textContent;
                 // $ExpectType HTMLInputElement | HTMLTextAreaElement
                 e.detail.inputElm;
                 // $ExpectType string
@@ -311,6 +310,8 @@ export function TestTagsMode(): React.ReactElement {
             onInput={e => {
                 // $ExpectType ValueTagData[]
                 e.detail.tagify.value;
+                // @ts-expect-error
+                e.detail.textContent;
                 // $ExpectType HTMLInputElement | HTMLTextAreaElement
                 e.detail.inputElm;
                 // $ExpectType string
@@ -325,6 +326,10 @@ export function TestTagsMode(): React.ReactElement {
                 e.detail.tagify.value;
                 // $ExpectType string
                 e.detail.textContent;
+                // @ts-expect-error
+                e.detail.inputElm;
+                // @ts-expect-error
+                e.detail.value;
             }}
             value={[John]}
         />
@@ -335,60 +340,57 @@ export function TestMixedTagsMode(): React.ReactElement {
     return (<div>
         <MixedTags<ValueTagData, undefined> value={[John]} />
         <MixedTags<ValueTagData, undefined> value={[John]} settings={{}} />
-        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: undefined}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: null}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: "select"}} />
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{ mode: undefined }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{ mode: null }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{ mode: "select" }} />
 
-        { /* @ts-expect-error */ }
+        { /* @ts-expect-error */}
         <MixedTags<ValueTagData, "mix"> value={[John]} />
-        { /* @ts-expect-error */ }
+        { /* @ts-expect-error */}
         <MixedTags<ValueTagData, "mix"> value={[John]} settings={{}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: undefined}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: null}} />
-        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: "select"}} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{ mode: undefined }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{ mode: null }} />
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{ mode: "select" }} />
 
         <MixedTags<ValueTagData, "mix" | undefined> value={[John]} />
         <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{}} />
-        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: undefined}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: null}} />
-        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "select"}} />
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: undefined }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: null }} />
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{ mode: "select" }} />
 
-        { /* @ts-expect-error */ }
+        { /* @ts-expect-error */}
         <MixedTags<ValueTagData, null> value={[John]} />
-        { /* @ts-expect-error */ }
+        { /* @ts-expect-error */}
         <MixedTags<ValueTagData, null> value={[John]} settings={{}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: undefined}} />
-        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: null}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: "mix"}} />
-        { /* @ts-expect-error */ }
-        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: "select"}} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, null> value={[John]} settings={{ mode: undefined }} />
+        <MixedTags<ValueTagData, null> value={[John]} settings={{ mode: null }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, null> value={[John]} settings={{ mode: "mix" }} />
+        { /* @ts-expect-error */}
+        <MixedTags<ValueTagData, null> value={[John]} settings={{ mode: "select" }} />
 
         <MixedTags<ValueTagData>
             onInput={e => {
                 // $ExpectType ValueTagData[]
                 e.detail.tagify.value;
-                if ("textContent" in e.detail) {
-                    // $ExpectType string
-                    e.detail.textContent;
-                } else {
-                    // $ExpectType HTMLInputElement | HTMLTextAreaElement
-                    e.detail.inputElm;
-                    // $ExpectType string
-                    e.detail.value;
-                }
+                // $ExpectType string | undefined
+                e.detail.textContent;
+                // $ExpectType HTMLInputElement | HTMLTextAreaElement | undefined
+                e.detail.inputElm;
+                // $ExpectType string | undefined
+                e.detail.value;
             }}
             value={[John]}
         />
@@ -397,6 +399,8 @@ export function TestMixedTagsMode(): React.ReactElement {
             onInput={e => {
                 // $ExpectType ValueTagData[]
                 e.detail.tagify.value;
+                // @ts-expect-error
+                e.detail.textContent;
                 // $ExpectType HTMLInputElement | HTMLTextAreaElement
                 e.detail.inputElm;
                 // $ExpectType string
@@ -409,6 +413,8 @@ export function TestMixedTagsMode(): React.ReactElement {
             onInput={e => {
                 // $ExpectType ValueTagData[]
                 e.detail.tagify.value;
+                // @ts-expect-error
+                e.detail.textContent;
                 // $ExpectType HTMLInputElement | HTMLTextAreaElement
                 e.detail.inputElm;
                 // $ExpectType string
@@ -423,6 +429,10 @@ export function TestMixedTagsMode(): React.ReactElement {
                 e.detail.tagify.value;
                 // $ExpectType string
                 e.detail.textContent;
+                // @ts-expect-error
+                e.detail.inputElm;
+                // @ts-expect-error
+                e.detail.value;
             }}
             value={[John]}
         />

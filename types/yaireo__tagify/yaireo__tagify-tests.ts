@@ -85,15 +85,12 @@ const settings: TagifySettings = {
         input: event => {
             // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
-            if ("textContent" in event.detail) {
-                // $ExpectType string
-                event.detail.textContent;
-            } else {
-                // $ExpectType HTMLInputElement | HTMLTextAreaElement
-                event.detail.inputElm;
-                // $ExpectType string
-                event.detail.value;
-            }
+            // $ExpectType string | undefined
+            event.detail.textContent;
+            // $ExpectType HTMLInputElement | HTMLTextAreaElement | undefined
+            event.detail.inputElm;
+            // $ExpectType string | undefined
+            event.detail.value;
         },
         invalid: event => {
             // $ExpectType TagData
@@ -662,15 +659,12 @@ tagify.on('edit:updated', (event) => {
 tagify.on('input', (event) => {
     // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
-    if ("textContent" in event.detail) {
-        // $ExpectType string
-        event.detail.textContent;
-    } else {
-        // $ExpectType string
-        event.detail.value;
-        // $ExpectType HTMLInputElement | HTMLTextAreaElement
-        event.detail.inputElm;
-    }
+    // $ExpectType string | undefined
+    event.detail.textContent;
+    // $ExpectType string | undefined
+    event.detail.value;
+    // $ExpectType HTMLInputElement | HTMLTextAreaElement | undefined
+    event.detail.inputElm;
 });
 tagify.on('click', (event) => {
     // $ExpectType TagData
@@ -842,15 +836,12 @@ tagify.off('edit:updated', (event) => {
 tagify.off('input', (event) => {
     // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
-    if ("textContent" in event.detail) {
-        // $ExpectType string
-        event.detail.textContent;
-    } else {
-        // $ExpectType HTMLInputElement | HTMLTextAreaElement
-        event.detail.inputElm;
-        // $ExpectType string
-        event.detail.value;
-    }
+    // $ExpectType string | undefined
+    event.detail.textContent;
+    // $ExpectType HTMLInputElement | HTMLTextAreaElement | undefined
+    event.detail.inputElm;
+    // $ExpectType string | undefined
+    event.detail.value;
 });
 tagify.off('click', (event) => {
     // $ExpectType TagData
@@ -948,6 +939,8 @@ tagify.off('dropdown:select', (event) => {
 modeTagifyUndefined.on("input", ({ detail }) => {
     // $ExpectType Tagify<TagData, undefined>
     detail.tagify;
+    // @ts-expect-error
+    detail.textContent;
     // $ExpectType HTMLInputElement | HTMLTextAreaElement
     detail.inputElm;
     // $ExpectType string
@@ -957,6 +950,8 @@ modeTagifyUndefined.on("input", ({ detail }) => {
 modeTagifyNull.on("input", ({ detail }) => {
     // $ExpectType Tagify<TagData, null>
     detail.tagify;
+    // @ts-expect-error
+    detail.textContent;
     // $ExpectType HTMLInputElement | HTMLTextAreaElement
     detail.inputElm;
     // $ExpectType string
@@ -966,6 +961,8 @@ modeTagifyNull.on("input", ({ detail }) => {
 modeTagifySelect.on("input", ({ detail }) => {
     // $ExpectType Tagify<TagData, "select">
     detail.tagify;
+    // @ts-expect-error
+    detail.textContent;
     // $ExpectType HTMLInputElement | HTMLTextAreaElement
     detail.inputElm;
     // $ExpectType string
@@ -977,6 +974,10 @@ modeTagifyMix.on("input", ({ detail }) => {
     detail.tagify;
     // $ExpectType string
     detail.textContent;
+    // @ts-expect-error
+    detail.inputElm;
+    // @ts-expect-error
+    detail.value;
 });
 
 typedTagify.on('click', (event) => {

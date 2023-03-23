@@ -14,14 +14,6 @@ declare namespace Tagify {
 
     /**
      * Resolves a mode-specific type by creating a new type depending on the
-     * value of the given mode `M`. Returns a union type that includes `Select`
-     * if `M` includes `'mix'` and that includes `Mix` if `M` includes
-     * `'select'`, `undefined`, or `null`.
-     */
-    type ModeSpecificUnion<M extends TagifyMode, Normal, Select, Mix> = M extends 'select' ? Select : M extends 'mix' ? Mix : Normal;
-
-    /**
-     * Resolves a mode-specific type by creating a new type depending on the
      * value of the given mode `M`.
      * Checks whether (1)  `M` is a sub type of `[null | undefined]`, (2)
      * whether `M` is a sub type `'mix'`, and (3) whether `M` is a sub type of
@@ -29,10 +21,10 @@ declare namespace Tagify {
      *
      * Returns `Normal` if only the first condition holds true, `Mix` if only
      * the second condition holds true, `Select` if only the third condition
-     * holds true, `Partial<Normal & Select & Mix>` if neither condition holds
+     * holds true, `Other` if neither condition holds
      * true, and `never` if all conditions hold true.
      */
-    type ModeSpecificIntersect<M extends TagifyMode, Normal, Select, Mix> =
+    type ModeSpecific<M extends TagifyMode, Normal, Select, Mix, Other> =
         [M] extends [never]
         ? never
         : [M] extends ["mix"]
@@ -41,7 +33,7 @@ declare namespace Tagify {
         ? Select
         : [M] extends [undefined | null]
         ? Normal
-        : Partial<Normal & Select & Mix>;
+        : Other;
 
     /**
      * Where the dropdown menu will appear:
@@ -788,7 +780,7 @@ declare namespace Tagify {
          * occurs.
          */
         callbacks?: {
-            [K in keyof ModeSpecificEventDataMap<T, M>]?: (event: CustomEvent<ModeSpecificEventDataMap<T, M>[K]>) => void;
+            [K in keyof EventDataMap]?: (event: CustomEvent<EventDataMap<T, M>[K]>) => void;
         } | undefined;
 
         /**
@@ -1233,13 +1225,34 @@ declare namespace Tagify {
     }
 
     /**
-     * For normal and select mode: Input event, when a tag is being typed / edited.
+     * For normal and select mode: Additional data when a tag is being typed / edited.
+     */
+    interface InputBaseEventData {
+        inputElm: HTMLInputElement | HTMLTextAreaElement;
+        value: string;
+    }
+
+    /**
+     * For mix mode: Additional data when a tag is being typed / edited.
+     */
+    interface InputBaseEventDataMix {
+        textContent: string;
+    }
+
+    /**
+     * For normal mode: Input event, when a tag is being typed / edited.
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface InputEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M> {
-        inputElm: HTMLInputElement | HTMLTextAreaElement;
-        value: string;
+    interface InputEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventData {
+    }
+
+    /**
+     * For normal mode: Input event, when a tag is being typed / edited.
+     * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
+     */
+    interface InputEventDataSelect<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventData {
     }
 
     /**
@@ -1247,8 +1260,15 @@ declare namespace Tagify {
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface InputEventDataMix<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M> {
-        textContent: string;
+    interface InputEventDataMix<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventDataMix {
+    }
+
+    /**
+     * For undecided mode: Input event, when a tag is being typed / edited.
+     * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
+     */
+    interface InputEventDataOther<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, Partial<InputBaseEventData>, Partial<InputBaseEventDataMix> {
     }
 
     /**
@@ -1263,7 +1283,7 @@ declare namespace Tagify {
      */
     interface RemoveEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> { }
 
-    interface BaseEventDataMap<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
+    interface EventDataMap<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
          * A tag has been added.
          */
@@ -1357,6 +1377,11 @@ declare namespace Tagify {
         'focus': FocusEventData<T, M>;
 
         /**
+         * Input event, when a tag is being typed / edited.
+         */
+        'input': ModeSpecific<M, InputEventData<T, M>, InputEventDataSelect<T, M>, InputEventDataMix<T, M>, InputEventDataOther<T, M>>;
+
+        /**
          * A tag has been added but did not pass validation.
          */
         'invalid': InvalidTagEventData<T, M>;
@@ -1372,44 +1397,6 @@ declare namespace Tagify {
          */
         'remove': RemoveEventData<T, M>;
     }
-
-    /**
-     * Map between the events that are triggered by tagify and the data provided
-     * for each event.
-     * @template T Type of the tag data. See the Tagify class for more details.
-     */
-    interface EventDataMap<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends BaseEventDataMap<T, M> {
-        /**
-         * Input event, when a tag is being typed / edited.
-         */
-        'input': InputEventData<T, M>;
-    }
-
-    /**
-     * Map between the events that are triggered by tagify and the data provided
-     * for each event.
-     * @template T Type of the tag data. See the Tagify class for more details.
-     */
-    interface EventDataMapSelect<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends BaseEventDataMap<T, M> {
-        /**
-         * Input event, when a tag is being typed / edited.
-         */
-        'input': InputEventData<T, M>;
-    }
-
-    /**
-     * Map between the events that are triggered by tagify and the data provided
-     * for each event.
-     * @template T Type of the tag data. See the Tagify class for more details.
-     */
-    interface EventDataMapMix<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends BaseEventDataMap<T, M> {
-        /**
-         * Input event, when a tag is being typed / edited.
-         */
-        'input': InputEventDataMix<T, M>;
-    }
-
-    type ModeSpecificEventDataMap<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> = ModeSpecificUnion<M, EventDataMap<T, M>, EventDataMapSelect<T, M>, EventDataMapMix<T, M>>;
 
     // types for the tagify instance
 
@@ -1930,9 +1917,9 @@ declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Ta
      * @param callback Callback listener to remove.
      * @returns This tagify instance for chaining method calls.
      */
-    off<K extends keyof Tagify.ModeSpecificEventDataMap<T, M>>(
+    off<K extends keyof Tagify.EventDataMap>(
         event: K,
-        callback: (event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>[K]>) => void
+        callback: (event: CustomEvent<Tagify.EventDataMap<T, M>[K]>) => void
     ): this;
 
     /**
@@ -1942,9 +1929,9 @@ declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Ta
      * @param callback Callback listener invoked when the event occurs.
      * @returns This tagify instance for chaining method calls.
      */
-    on<K extends keyof Tagify.ModeSpecificEventDataMap<T, M>>(
+    on<K extends keyof Tagify.EventDataMap>(
         event: K,
-        callback: (event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>[K]>) => void
+        callback: (event: CustomEvent<Tagify.EventDataMap<T, M>[K]>) => void
     ): this;
 }
 

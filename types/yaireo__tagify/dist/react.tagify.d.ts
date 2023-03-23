@@ -2,7 +2,6 @@ import Tagify = require('@yaireo/tagify');
 
 import {
     BaseTagData,
-    ModeSpecificEventDataMap,
     TagData,
     TagifyMode,
     TagifySettings,
@@ -92,7 +91,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onAdd?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["add"]>) => void) | undefined;
+        onAdd?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["add"]>) => void) | undefined;
 
         /**
          * Callback invoked when the component lost focus.
@@ -101,7 +100,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onBlur?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["blur"]>) => void) | undefined;
+        onBlur?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["blur"]>) => void) | undefined;
 
         /**
          * Callback invoked when any change to the value has occurred.
@@ -110,7 +109,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onChange?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["change"]>) => void) | undefined;
+        onChange?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["change"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag was clicked.
@@ -119,7 +118,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onClick?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["click"]>) => void) | undefined;
+        onClick?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["click"]>) => void) | undefined;
 
         /**
          * Callback invoked when the suggestions dropdown has been removed from
@@ -129,7 +128,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownHide?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:hide"]>) => void) | undefined;
+        onDropdownHide?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["dropdown:hide"]>) => void) | undefined;
 
         /**
          * Callback invoked when no whitelist suggestion item matched for the
@@ -141,7 +140,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownNoMatch?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:noMatch"]>) => void) | undefined;
+        onDropdownNoMatch?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["dropdown:noMatch"]>) => void) | undefined;
 
         /**
          * Callback invoked when the dropdown was scrolled by the user. Use
@@ -151,7 +150,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownScroll?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:scroll"]>) => void) | undefined;
+        onDropdownScroll?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["dropdown:scroll"]>) => void) | undefined;
 
         /**
          * Callback invoked when a suggestions dropdown item was selected (by
@@ -161,7 +160,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownSelect?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:select"]>) => void) | undefined;
+        onDropdownSelect?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["dropdown:select"]>) => void) | undefined;
 
         /**
          * Callback invoked when the suggestions dropdown is about to be
@@ -171,7 +170,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownShow?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:show"]>) => void) | undefined;
+        onDropdownShow?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["dropdown:show"]>) => void) | undefined;
 
         /**
          * Callback invoked when the dropdown menu is open and its items were
@@ -181,7 +180,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownUpdated?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:updated"]>) => void) | undefined;
+        onDropdownUpdated?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["dropdown:updated"]>) => void) | undefined;
 
         /**
          * Callback invoked just before a tag has been updated, while still in
@@ -191,7 +190,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditBeforeUpdate?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:beforeUpdate"]>) => void) | undefined;
+        onEditBeforeUpdate?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["edit:beforeUpdate"]>) => void) | undefined;
 
         /**
          * Callback invoked when typing inside an edited tag.
@@ -200,7 +199,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditInput?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:input"]>) => void) | undefined;
+        onEditInput?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["edit:input"]>) => void) | undefined;
 
         /**
          * Callback invoked when a keydown event occurs while an edited tag is
@@ -210,7 +209,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditKeydown?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:keydown"]>) => void) | undefined;
+        onEditKeydown?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["edit:keydown"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag is now in "edit mode".
@@ -219,7 +218,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditStart?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:start"]>) => void) | undefined;
+        onEditStart?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["edit:start"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag has been updated (changed view editing or
@@ -229,7 +228,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditUpdated?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:updated"]>) => void) | undefined;
+        onEditUpdated?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["edit:updated"]>) => void) | undefined;
 
         /**
          * Callback invoked when the component gained focus.
@@ -238,7 +237,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onFocus?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["focus"]>) => void) | undefined;
+        onFocus?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["focus"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag is being typed / edited.
@@ -247,7 +246,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onInput?: ((event: CustomEvent<ModeSpecificEventDataMap<T, M>["input"]>) => void) | undefined;
+        onInput?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["input"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag has been added but did not pass
@@ -257,7 +256,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onInvalid?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["invalid"]>) => void) | undefined;
+        onInvalid?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["invalid"]>) => void) | undefined;
 
         /**
          * Callback invoked when the tagify input element (for adding new tags
@@ -267,7 +266,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onKeydown?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["keydown"]>) => void) | undefined;
+        onKeydown?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["keydown"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag has been removed.
@@ -276,7 +275,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onRemove?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["remove"]>) => void) | undefined;
+        onRemove?: ((event: CustomEvent<Tagify.EventDataMap<T, M>["remove"]>) => void) | undefined;
 
         /**
          * Placeholder text for input where the user can enter more tags.
