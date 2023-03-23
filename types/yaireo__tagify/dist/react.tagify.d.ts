@@ -1,28 +1,10 @@
 import Tagify = require('@yaireo/tagify');
 
 import {
-    AddEventData,
     BaseTagData,
-    BlurEventData,
-    ChangeEventData,
-    ClickEventData,
-    DropDownHideEventData,
-    DropDownNoMatchEventData,
-    DropDownScrollEventData,
-    DropDownSelectEventData,
-    DropDownShowEventData,
-    DropDownUpdatedEventData,
-    EditBeforeUpdateEventData,
-    EditKeydownEventData,
-    EditInputEventData,
-    EditStartEventData,
-    EditUpdatedEventData,
-    FocusEventData,
-    InputEventData,
-    InvalidTagEventData,
-    KeydownEventData,
-    RemoveEventData,
+    ModeSpecificEventDataMap,
     TagData,
+    TagifyMode,
     TagifySettings,
 } from '@yaireo/tagify';
 
@@ -46,7 +28,7 @@ declare namespace Tags {
      * {@link BaseTagData},specify the allowed properties and use that as the
      * type parameter.
      */
-    interface TagifyBaseReactProps<T extends BaseTagData = TagData> {
+    interface TagifyBaseReactProps<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
          * Should the component have focus on mount. Must be unique, per-page.
          *
@@ -110,7 +92,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onAdd?: ((event: CustomEvent<AddEventData<T>>) => void) | undefined;
+        onAdd?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["add"]>) => void) | undefined;
 
         /**
          * Callback invoked when the component lost focus.
@@ -119,7 +101,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onBlur?: ((event: CustomEvent<BlurEventData<T>>) => void) | undefined;
+        onBlur?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["blur"]>) => void) | undefined;
 
         /**
          * Callback invoked when any change to the value has occurred.
@@ -128,7 +110,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onChange?: ((event: CustomEvent<ChangeEventData<T>>) => void) | undefined;
+        onChange?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["change"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag was clicked.
@@ -137,7 +119,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onClick?: ((event: CustomEvent<ClickEventData<T>>) => void) | undefined;
+        onClick?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["click"]>) => void) | undefined;
 
         /**
          * Callback invoked when the suggestions dropdown has been removed from
@@ -147,7 +129,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownHide?: ((event: CustomEvent<DropDownHideEventData<T>>) => void) | undefined;
+        onDropdownHide?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:hide"]>) => void) | undefined;
 
         /**
          * Callback invoked when no whitelist suggestion item matched for the
@@ -159,7 +141,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownNoMatch?: ((event: CustomEvent<DropDownNoMatchEventData<T>>) => void) | undefined;
+        onDropdownNoMatch?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:noMatch"]>) => void) | undefined;
 
         /**
          * Callback invoked when the dropdown was scrolled by the user. Use
@@ -169,7 +151,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownScroll?: ((event: CustomEvent<DropDownScrollEventData<T>>) => void) | undefined;
+        onDropdownScroll?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:scroll"]>) => void) | undefined;
 
         /**
          * Callback invoked when a suggestions dropdown item was selected (by
@@ -179,7 +161,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownSelect?: ((event: CustomEvent<DropDownSelectEventData<T>>) => void) | undefined;
+        onDropdownSelect?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:select"]>) => void) | undefined;
 
         /**
          * Callback invoked when the suggestions dropdown is about to be
@@ -189,7 +171,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownShow?: ((event: CustomEvent<DropDownShowEventData<T>>) => void) | undefined;
+        onDropdownShow?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:show"]>) => void) | undefined;
 
         /**
          * Callback invoked when the dropdown menu is open and its items were
@@ -199,7 +181,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onDropdownUpdated?: ((event: CustomEvent<DropDownUpdatedEventData<T>>) => void) | undefined;
+        onDropdownUpdated?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["dropdown:updated"]>) => void) | undefined;
 
         /**
          * Callback invoked just before a tag has been updated, while still in
@@ -209,7 +191,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditBeforeUpdate?: ((event: CustomEvent<EditBeforeUpdateEventData<T>>) => void) | undefined;
+        onEditBeforeUpdate?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:beforeUpdate"]>) => void) | undefined;
 
         /**
          * Callback invoked when typing inside an edited tag.
@@ -218,7 +200,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditInput?: ((event: CustomEvent<EditInputEventData<T>>) => void) | undefined;
+        onEditInput?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:input"]>) => void) | undefined;
 
         /**
          * Callback invoked when a keydown event occurs while an edited tag is
@@ -228,7 +210,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditKeydown?: ((event: CustomEvent<EditKeydownEventData<T>>) => void) | undefined;
+        onEditKeydown?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:keydown"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag is now in "edit mode".
@@ -237,7 +219,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditStart?: ((event: CustomEvent<EditStartEventData<T>>) => void) | undefined;
+        onEditStart?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:start"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag has been updated (changed view editing or
@@ -247,7 +229,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onEditUpdated?: ((event: CustomEvent<EditUpdatedEventData<T>>) => void) | undefined;
+        onEditUpdated?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["edit:updated"]>) => void) | undefined;
 
         /**
          * Callback invoked when the component gained focus.
@@ -256,7 +238,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onFocus?: ((event: CustomEvent<FocusEventData<T>>) => void) | undefined;
+        onFocus?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["focus"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag is being typed / edited.
@@ -265,7 +247,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onInput?: ((event: CustomEvent<InputEventData<T>>) => void) | undefined;
+        onInput?: ((event: CustomEvent<ModeSpecificEventDataMap<T, M>["input"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag has been added but did not pass
@@ -275,7 +257,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onInvalid?: ((event: CustomEvent<InvalidTagEventData<T>>) => void) | undefined;
+        onInvalid?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["invalid"]>) => void) | undefined;
 
         /**
          * Callback invoked when the tagify input element (for adding new tags
@@ -285,7 +267,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onKeydown?: ((event: CustomEvent<KeydownEventData<T>>) => void) | undefined;
+        onKeydown?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["keydown"]>) => void) | undefined;
 
         /**
          * Callback invoked when a tag has been removed.
@@ -294,7 +276,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default () => {}
          */
-        onRemove?: ((event: CustomEvent<RemoveEventData<T>>) => void) | undefined;
+        onRemove?: ((event: CustomEvent<Tagify.ModeSpecificEventDataMap<T, M>["remove"]>) => void) | undefined;
 
         /**
          * Placeholder text for input where the user can enter more tags.
@@ -324,7 +306,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default {}
          */
-        settings?: TagifySettings<T> | undefined;
+        settings?: TagifySettings<T, M> | undefined;
 
         /**
          * If `false`, does not show the suggestions dropdown. If `true`, shows
@@ -352,7 +334,7 @@ declare namespace Tags {
          * value after the initial render is not supported.
          * @default undefined
          */
-        tagifyRef?: MutableRefObject<Tagify<T> | undefined> | undefined;
+        tagifyRef?: MutableRefObject<Tagify<T, M> | undefined> | undefined;
 
         /**
          * Same as `defaultValue`. Initial value, i.e. the initial tags that are
@@ -378,7 +360,7 @@ declare namespace Tags {
         whitelist?: string[] | T[] | undefined;
     }
 
-    interface TagifyTagsReactProps<T extends BaseTagData = TagData> extends TagifyBaseReactProps<T> {
+    interface TagifyTagsReactProps<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagifyBaseReactProps<T, M> {
         /**
          * `textarea` will create a TEXTAREA (hidden) element instead of the
          * default INPUT element and automatically make Tagify act as
@@ -400,30 +382,36 @@ declare namespace Tags {
      * {@link BaseTagData},specify the allowed properties and use that as the
      * type parameter.
      */
-    interface TagifyMixedTagsReactProps<T extends BaseTagData = TagData> extends TagifyBaseReactProps<T> {
+    interface TagifyMixedTagsReactProps<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagifyBaseReactProps<T, M> {
     }
 
     /**
      * React wrapper component that renders a tagify editor in mixed-mode. This
      * is a shortcut for the `<Tags InputMode="textarea" />`.
-     * @param props Optional properties for configuring the tagify editor.
+     * @param props Properties for configuring the tagify editor.
      * @returns The rendered React tagify element.
      */
-    // Type parameter is used more than once within the TagifyMixedTagsReactProps interface
-    // eslint-disable-next-line no-unnecessary-generics
-    function MixedTags<T extends BaseTagData = TagData>(props: TagifyMixedTagsReactProps<T>): ReactElement;
+    // the & ... bit is a hack to either
+    // force the settings and the mode to be required when the mode does not include "undefined"
+    // disallow this function with optional settings when the mode does not include "undefined"
+    function MixedTags<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode>(
+        props: TagifyMixedTagsReactProps<T, M> & ([undefined] extends [M] ? unknown : { settings: TagifySettings<T, M> & { mode: M } })
+    ): ReactElement;
 }
 
 /**
  * React wrapper component for the tagify tags editor.
- * @param props Optional properties for configuring the tagify editor. Please
- * note that only some of these properties can be updated (changed after the
- * initial rendering), see the individual properties in
+ * @param props Properties for configuring the tagify editor. Please note that
+ * only some of these properties can be updated (changed after the initial
+ * rendering), see the individual properties in
  * {@link Tags.TagifyTagsReactProps} for more details.
  * @returns The rendered React tagify element.
  */
-// Type parameter is used more than once within the TagifyTagsReactProps interface
-// eslint-disable-next-line no-unnecessary-generics
-declare function Tags<T extends BaseTagData = TagData>(props: Tags.TagifyTagsReactProps<T>): ReactElement;
+// the & ... bit is a hack to either
+// force the settings and the mode to be required when the mode does not include "undefined"
+// disallow this function with optional settings when the mode does not include "undefined"
+declare function Tags<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode>(
+    props: Tags.TagifyTagsReactProps<T, M> & ([undefined] extends [M] ? unknown : { settings: TagifySettings<T, M> & { mode: M } })
+): ReactElement;
 
 export = Tags;

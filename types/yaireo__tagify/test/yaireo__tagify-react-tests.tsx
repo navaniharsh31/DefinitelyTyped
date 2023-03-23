@@ -83,83 +83,83 @@ export function TestTagsOnCallbacks(): React.ReactElement {
     return (<div>
         <Tags
             onAdd={e => {
-                // $ExpectType AddEventData<TagData>
+                // $ExpectType AddEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onBlur={e => {
-                // $ExpectType BlurEventData<TagData>
+                // $ExpectType BlurEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onChange={e => {
-                // $ExpectType ChangeEventData<TagData>
+                // $ExpectType ChangeEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onClick={e => {
-                // $ExpectType ClickEventData<TagData>
+                // $ExpectType ClickEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownHide={e => {
-                // $ExpectType DropDownHideEventData<TagData>
+                // $ExpectType DropDownHideEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownNoMatch={e => {
-                // $ExpectType DropDownNoMatchEventData<TagData>
+                // $ExpectType DropDownNoMatchEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownScroll={e => {
-                // $ExpectType DropDownScrollEventData<TagData>
+                // $ExpectType DropDownScrollEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownSelect={e => {
-                // $ExpectType DropDownSelectEventData<TagData>
+                // $ExpectType DropDownSelectEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownShow={e => {
-                // $ExpectType DropDownShowEventData<TagData>
+                // $ExpectType DropDownShowEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownUpdated={e => {
-                // $ExpectType DropDownUpdatedEventData<TagData>
+                // $ExpectType DropDownUpdatedEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditBeforeUpdate={e => {
-                // $ExpectType EditBeforeUpdateEventData<TagData>
+                // $ExpectType EditBeforeUpdateEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditInput={e => {
-                // $ExpectType EditInputEventData<TagData>
+                // $ExpectType EditInputEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditKeydown={e => {
-                // $ExpectType EditKeydownEventData<TagData>
+                // $ExpectType EditKeydownEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditStart={e => {
-                // $ExpectType EditStartEventData<TagData>
+                // $ExpectType EditStartEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditUpdated={e => {
-                // $ExpectType EditUpdatedEventData<TagData>
+                // $ExpectType EditUpdatedEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onFocus={e => {
-                // $ExpectType FocusEventData<TagData>
+                // $ExpectType FocusEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onInput={e => {
-                // $ExpectType InputEventData<TagData>
+                // $ExpectType InputEventData<TagData, TagifyMode> | InputEventDataMix<TagData, TagifyMode>
                 e.detail;
             }}
             onInvalid={e => {
-                // $ExpectType InvalidTagEventData<TagData>
+                // $ExpectType InvalidTagEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onKeydown={e => {
-                // $ExpectType KeydownEventData<TagData>
+                // $ExpectType KeydownEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onRemove={e => {
-                // $ExpectType RemoveEventData<TagData>
+                // $ExpectType RemoveEventData<TagData, TagifyMode>
                 e.detail;
             }}
         />
@@ -233,6 +233,201 @@ interface ValueTagData extends BaseTagData {
     name: string;
     age: number;
 }
+export function TestTagsMode(): React.ReactElement {
+    const John: ValueTagData = { age: 12, name: 'John', value: 'p123' };
+    return (<div>
+        <Tags<ValueTagData, undefined> value={[John]} />
+        <Tags<ValueTagData, undefined> value={[John]} settings={{}} />
+        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: undefined}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: null}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, undefined> value={[John]} settings={{mode: "select"}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, "mix"> value={[John]} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: undefined}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: null}} />
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, "mix"> value={[John]} settings={{mode: "select"}} />
+
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} />
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{}} />
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: undefined}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: null}} />
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "select"}} />
+
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, null> value={[John]} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, null> value={[John]} settings={{}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, null> value={[John]} settings={{mode: undefined}} />
+        <Tags<ValueTagData, null> value={[John]} settings={{mode: null}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, null> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <Tags<ValueTagData, null> value={[John]} settings={{mode: "select"}} />
+
+        <Tags<ValueTagData>
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                if ("textContent" in e.detail) {
+                    // $ExpectType string
+                    e.detail.textContent;
+                } else {
+                    // $ExpectType HTMLInputElement | HTMLTextAreaElement
+                    e.detail.inputElm;
+                    // $ExpectType string
+                    e.detail.value;
+                }
+            }}
+            value={[John]}
+        />
+        <Tags<ValueTagData, null>
+            settings={{ mode: null }}
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                // $ExpectType HTMLInputElement | HTMLTextAreaElement
+                e.detail.inputElm;
+                // $ExpectType string
+                e.detail.value;
+            }}
+            value={[John]}
+        />
+        <Tags<ValueTagData, "select">
+            settings={{ mode: "select" }}
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                // $ExpectType HTMLInputElement | HTMLTextAreaElement
+                e.detail.inputElm;
+                // $ExpectType string
+                e.detail.value;
+            }}
+            value={[John]}
+        />
+        <Tags<ValueTagData, "mix">
+            settings={{ mode: "mix" }}
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                // $ExpectType string
+                e.detail.textContent;
+            }}
+            value={[John]}
+        />
+    </div>);
+}
+export function TestMixedTagsMode(): React.ReactElement {
+    const John: ValueTagData = { age: 12, name: 'John', value: 'p123' };
+    return (<div>
+        <MixedTags<ValueTagData, undefined> value={[John]} />
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{}} />
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: undefined}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: null}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, undefined> value={[John]} settings={{mode: "select"}} />
+
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, "mix"> value={[John]} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: undefined}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: null}} />
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, "mix"> value={[John]} settings={{mode: "select"}} />
+
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} />
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{}} />
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: undefined}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: null}} />
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, "mix" | undefined> value={[John]} settings={{mode: "select"}} />
+
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, null> value={[John]} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, null> value={[John]} settings={{}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: undefined}} />
+        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: null}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: "mix"}} />
+        { /* @ts-expect-error */ }
+        <MixedTags<ValueTagData, null> value={[John]} settings={{mode: "select"}} />
+
+        <MixedTags<ValueTagData>
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                if ("textContent" in e.detail) {
+                    // $ExpectType string
+                    e.detail.textContent;
+                } else {
+                    // $ExpectType HTMLInputElement | HTMLTextAreaElement
+                    e.detail.inputElm;
+                    // $ExpectType string
+                    e.detail.value;
+                }
+            }}
+            value={[John]}
+        />
+        <MixedTags<ValueTagData, null>
+            settings={{ mode: null }}
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                // $ExpectType HTMLInputElement | HTMLTextAreaElement
+                e.detail.inputElm;
+                // $ExpectType string
+                e.detail.value;
+            }}
+            value={[John]}
+        />
+        <MixedTags<ValueTagData, "select">
+            settings={{ mode: "select" }}
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                // $ExpectType HTMLInputElement | HTMLTextAreaElement
+                e.detail.inputElm;
+                // $ExpectType string
+                e.detail.value;
+            }}
+            value={[John]}
+        />
+        <MixedTags<ValueTagData, "mix">
+            settings={{ mode: "mix" }}
+            onInput={e => {
+                // $ExpectType ValueTagData[]
+                e.detail.tagify.value;
+                // $ExpectType string
+                e.detail.textContent;
+            }}
+            value={[John]}
+        />
+    </div>);
+}
 export function TestTagsTypeParam(): React.ReactElement {
     const John: ValueTagData = { age: 12, name: 'John', value: 'p123' };
     const Mary = { age: 18, name: 'Mary', value: 'p843' };
@@ -258,47 +453,47 @@ export function TestTagsTypeParam(): React.ReactElement {
                 e.detail.tagify.value;
             }}
             onDropdownHide={e => {
-                // $ExpectType DropDownHideEventData<ValueTagData>
+                // $ExpectType DropDownHideEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownNoMatch={e => {
-                // $ExpectType DropDownNoMatchEventData<ValueTagData>
+                // $ExpectType DropDownNoMatchEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownScroll={e => {
-                // $ExpectType DropDownScrollEventData<ValueTagData>
+                // $ExpectType DropDownScrollEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownSelect={e => {
-                // $ExpectType DropDownSelectEventData<ValueTagData>
+                // $ExpectType DropDownSelectEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownShow={e => {
-                // $ExpectType DropDownShowEventData<ValueTagData>
+                // $ExpectType DropDownShowEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownUpdated={e => {
-                // $ExpectType DropDownUpdatedEventData<ValueTagData>
+                // $ExpectType DropDownUpdatedEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditBeforeUpdate={e => {
-                // $ExpectType EditBeforeUpdateEventData<ValueTagData>
+                // $ExpectType EditBeforeUpdateEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditInput={e => {
-                // $ExpectType EditInputEventData<ValueTagData>
+                // $ExpectType EditInputEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditKeydown={e => {
-                // $ExpectType EditKeydownEventData<ValueTagData>
+                // $ExpectType EditKeydownEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditStart={e => {
-                // $ExpectType EditStartEventData<ValueTagData>
+                // $ExpectType EditStartEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditUpdated={e => {
-                // $ExpectType EditUpdatedEventData<ValueTagData>
+                // $ExpectType EditUpdatedEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onFocus={e => {
@@ -326,15 +521,15 @@ export function TestTagsTypeParam(): React.ReactElement {
         />
         {
             // @ts-expect-error
-            <Tags<ValueTagData> defaultValue={[InvalidTag]} />
+            <Tags<ValueTagData, TagifyMode> defaultValue={[InvalidTag]} />
         }
         {
             // @ts-expect-error
-            <Tags<ValueTagData> value={[InvalidTag]} />
+            <Tags<ValueTagData, TagifyMode> value={[InvalidTag]} />
         }
         {
             // @ts-expect-error
-            <Tags<ValueTagData> whitelist={[InvalidTag]} />
+            <Tags<ValueTagData, TagifyMode> whitelist={[InvalidTag]} />
         }
     </div>);
 }
@@ -406,83 +601,83 @@ export function TestMixedTagsOnCallbacks(): React.ReactElement {
     return (<div>
         <Tags
             onAdd={e => {
-                // // $ExpectType AddEventData<TagData>
+                // // $ExpectType AddEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onBlur={e => {
-                // // $ExpectType BlurEventData<TagData>
+                // // $ExpectType BlurEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onChange={e => {
-                // // $ExpectType ChangeEventData<TagData>
+                // // $ExpectType ChangeEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onClick={e => {
-                // // $ExpectType ClickEventData<TagData>
+                // // $ExpectType ClickEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownHide={e => {
-                // $ExpectType DropDownHideEventData<TagData>
+                // $ExpectType DropDownHideEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownNoMatch={e => {
-                // $ExpectType DropDownNoMatchEventData<TagData>
+                // $ExpectType DropDownNoMatchEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownScroll={e => {
-                // $ExpectType DropDownScrollEventData<TagData>
+                // $ExpectType DropDownScrollEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownSelect={e => {
-                // $ExpectType DropDownSelectEventData<TagData>
+                // $ExpectType DropDownSelectEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownShow={e => {
-                // $ExpectType DropDownShowEventData<TagData>
+                // $ExpectType DropDownShowEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onDropdownUpdated={e => {
-                // $ExpectType DropDownUpdatedEventData<TagData>
+                // $ExpectType DropDownUpdatedEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditBeforeUpdate={e => {
-                // $ExpectType EditBeforeUpdateEventData<TagData>
+                // $ExpectType EditBeforeUpdateEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditInput={e => {
-                // $ExpectType EditInputEventData<TagData>
+                // $ExpectType EditInputEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditKeydown={e => {
-                // $ExpectType EditKeydownEventData<TagData>
+                // $ExpectType EditKeydownEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditStart={e => {
-                // $ExpectType EditStartEventData<TagData>
+                // $ExpectType EditStartEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onEditUpdated={e => {
-                // $ExpectType EditUpdatedEventData<TagData>
+                // $ExpectType EditUpdatedEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onFocus={e => {
-                // // $ExpectType FocusEventData<TagData>
+                // // $ExpectType FocusEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onInput={e => {
-                // // $ExpectType InputEventData<TagData>
+                // // $ExpectType InputEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onInvalid={e => {
-                // // $ExpectType InvalidTagEventData<TagData>
+                // // $ExpectType InvalidTagEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onKeydown={e => {
-                // // $ExpectType KeydownEventData<TagData>
+                // // $ExpectType KeydownEventData<TagData, TagifyMode>
                 e.detail;
             }}
             onRemove={e => {
-                // // $ExpectType RemoveEventData<TagData>
+                // // $ExpectType RemoveEventData<TagData, TagifyMode>
                 e.detail;
             }}
         />
@@ -579,47 +774,47 @@ export function TestMixedTagsTypeParam(): React.ReactElement {
                 e.detail.tagify.value;
             }}
             onDropdownHide={e => {
-                // $ExpectType DropDownHideEventData<ValueTagData>
+                // $ExpectType DropDownHideEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownNoMatch={e => {
-                // $ExpectType DropDownNoMatchEventData<ValueTagData>
+                // $ExpectType DropDownNoMatchEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownScroll={e => {
-                // $ExpectType DropDownScrollEventData<ValueTagData>
+                // $ExpectType DropDownScrollEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownSelect={e => {
-                // $ExpectType DropDownSelectEventData<ValueTagData>
+                // $ExpectType DropDownSelectEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownShow={e => {
-                // $ExpectType DropDownShowEventData<ValueTagData>
+                // $ExpectType DropDownShowEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onDropdownUpdated={e => {
-                // $ExpectType DropDownUpdatedEventData<ValueTagData>
+                // $ExpectType DropDownUpdatedEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditBeforeUpdate={e => {
-                // $ExpectType EditBeforeUpdateEventData<ValueTagData>
+                // $ExpectType EditBeforeUpdateEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditInput={e => {
-                // $ExpectType EditInputEventData<ValueTagData>
+                // $ExpectType EditInputEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditKeydown={e => {
-                // $ExpectType EditKeydownEventData<ValueTagData>
+                // $ExpectType EditKeydownEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditStart={e => {
-                // $ExpectType EditStartEventData<ValueTagData>
+                // $ExpectType EditStartEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onEditUpdated={e => {
-                // $ExpectType EditUpdatedEventData<ValueTagData>
+                // $ExpectType EditUpdatedEventData<ValueTagData, TagifyMode>
                 e.detail;
             }}
             onFocus={e => {
@@ -647,7 +842,7 @@ export function TestMixedTagsTypeParam(): React.ReactElement {
         />
         {
             // @ts-expect-error
-            <Tags<ValueTagData> value={[John]} whitelist={[InvalidTag]} />
+            <Tags<ValueTagData, TagifyMode> value={[John]} whitelist={[InvalidTag]} />
         }
     </div>);
 }
@@ -762,7 +957,7 @@ export const CrazyTags = () => {
         <>
             <h2>
                 <em>Crazy</em> Tags:
-        </h2>
+            </h2>
             <p>
                 Wait a <em>few seconds</em> to see things happen. <br />
                 <small>
@@ -771,7 +966,7 @@ export const CrazyTags = () => {
             </p>
             <button className='clearAllBtn' onClick={clearAll}>
                 Clear All
-        </button>
+            </button>
             <Tags
                 tagifyRef={tagifyRef}
                 settings={settings}

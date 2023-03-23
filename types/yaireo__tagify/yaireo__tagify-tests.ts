@@ -39,17 +39,17 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         blur: event => {
             // $ExpectType Element
             event.detail.relatedTarget;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         change: event => {
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType string
             event.detail.value;
@@ -61,7 +61,7 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType MouseEvent
             event.detail.event;
@@ -73,20 +73,27 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         focus: event => {
             // $ExpectType Element
             event.detail.relatedTarget;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         input: event => {
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
-            // $ExpectType string
-            event.detail.textContent;
+            if ("textContent" in event.detail) {
+                // $ExpectType string
+                event.detail.textContent;
+            } else {
+                // $ExpectType HTMLInputElement | HTMLTextAreaElement
+                event.detail.inputElm;
+                // $ExpectType string
+                event.detail.value;
+            }
         },
         invalid: event => {
             // $ExpectType TagData
@@ -95,13 +102,13 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType string | boolean
             event.detail.message;
         },
         keydown: event => {
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType KeyboardEvent
             event.detail.event;
@@ -113,29 +120,29 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         "dropdown:hide": event => {
             // $ExpectType HTMLElement | null
             event.detail.parentElement;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         "dropdown:scroll": event => {
             // $ExpectType number
             event.detail.percentage;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         "dropdown:noMatch": event => {
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType string
             event.detail.value;
         },
         "dropdown:select": event => {
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType TagData
             event.detail.data;
@@ -145,13 +152,13 @@ const settings: TagifySettings = {
         "dropdown:show": event => {
             // $ExpectType HTMLElement | null
             event.detail.parentElement;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         "dropdown:updated": event => {
             // $ExpectType HTMLElement | null
             event.detail.parentElement;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         "edit:beforeUpdate": event => {
@@ -161,7 +168,7 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
         "edit:input": event => {
@@ -171,13 +178,13 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType Event
             event.detail.event;
         },
         "edit:keydown": event => {
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType KeyboardEvent
             event.detail.event;
@@ -189,7 +196,7 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
             // $ExpectType boolean
             event.detail.isValid;
@@ -200,7 +207,7 @@ const settings: TagifySettings = {
             event.detail.index;
             // $ExpectType HTMLElement
             event.detail.tag;
-            // $ExpectType Tagify<TagData>
+            // $ExpectType Tagify<TagData, TagifyMode>
             event.detail.tagify;
         },
     },
@@ -370,7 +377,7 @@ interface MyTagData extends BaseTagData {
     name: string;
 }
 
-const typedSettings: TagifyConstructorSettings<MyTagData> = {
+const typedSettings: TagifySettings<MyTagData> = {
     templates: {
         tag: (tagData) => `${tagData.name} ${tagData.title.substring(0)}`,
         dropdownItem: item => `${item.active}`,
@@ -437,6 +444,77 @@ const inputElement = document.createElement('input');
 const textAreaElement = document.createElement('textarea');
 const tagify = new Tagify(inputElement, settings);
 const typedTagify = new Tagify(inputElement, typedSettings);
+// @ts-expect-error
+new Tagify<TagData, "mix">(inputElement, {});
+// @ts-expect-error
+new Tagify<TagData, "select">(inputElement);
+new Tagify<TagData, undefined>(inputElement);
+// @ts-expect-error
+new Tagify<TagData, null>(inputElement);
+// @ts-expect-error
+new Tagify<TagData, "mix" | null>(inputElement, {});
+new Tagify<TagData, "mix" | null>(inputElement, { mode: null });
+new Tagify<TagData, "mix" | null>(inputElement, { mode: "mix" });
+// @ts-expect-error
+new Tagify<TagData, "mix" | null>(inputElement, { mode: undefined });
+// @ts-expect-error
+new Tagify<TagData, "mix" | null>(inputElement, { mode: "select" });
+new Tagify<TagData, "mix" | undefined>(inputElement, {});
+new Tagify<TagData, "mix" | undefined>(inputElement, { mode: "mix" });
+new Tagify<TagData, "mix" | undefined>(inputElement, { mode: undefined });
+new Tagify<TagData, "mix" | undefined>(inputElement, {
+    // @ts-expect-error
+    mode: null
+});
+new Tagify<TagData, "mix" | undefined>(inputElement, {
+    // @ts-expect-error
+    mode: "select"
+});
+// @ts-expect-error
+new Tagify<TagData, "mix">(inputElement, { mode: null, });
+// @ts-expect-error
+new Tagify<TagData, "mix">(inputElement, { mode: "select", });
+// @ts-expect-error
+new Tagify<TagData, "mix">(inputElement, { mode: undefined, });
+// @ts-expect-error
+new Tagify<TagData, "select">(inputElement, { mode: null, });
+const modeTagifyNormal = new Tagify(inputElement, {
+    mode: null,
+    callbacks: {
+        input: event => {
+            // $ExpectType Tagify<TagData, null>
+            event.detail.tagify;
+            // $ExpectType HTMLInputElement | HTMLTextAreaElement
+            event.detail.inputElm;
+            // $ExpectType string
+            event.detail.value;
+        },
+    },
+});
+const modeTagifySelect = new Tagify(inputElement, {
+    mode: "select",
+    callbacks: {
+        input: event => {
+            // $ExpectType Tagify<TagData, "select">
+            event.detail.tagify;
+            // $ExpectType HTMLInputElement | HTMLTextAreaElement
+            event.detail.inputElm;
+            // $ExpectType string
+            event.detail.value;
+        },
+    },
+});
+const modeTagifyMix = new Tagify(inputElement, {
+    mode: "mix",
+    callbacks: {
+        input: event => {
+            // $ExpectType Tagify<TagData, "mix">
+            event.detail.tagify;
+            // $ExpectType string
+            event.detail.textContent;
+        },
+    },
+});
 const tagifyArea = new Tagify(textAreaElement);
 const tagifyOneArg = new Tagify(inputElement);
 const tagifyEmptySettings = new Tagify(inputElement, {});
@@ -479,9 +557,9 @@ if (typedTagify.suggestedListItems !== undefined) {
 
 tagify.whitelist = ['another', 'good', 'word'];
 
-// $ExpectType Tagify<TagData>
+// $ExpectType Tagify<TagData, TagifyMode>
 tagify.on('add', (event) => { });
-// $ExpectType Tagify<TagData>
+// $ExpectType Tagify<TagData, TagifyMode>
 tagify.off('add', (event) => { });
 
 // @ts-expect-error
@@ -490,13 +568,13 @@ tagify.on('foobar', (event) => { });
 tagify.off('foobar', (event) => { });
 
 tagify.on('change', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType string
     event.detail.value;
 });
 tagify.on('dropdown:noMatch', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType string
     event.detail.value;
@@ -508,7 +586,7 @@ tagify.on('invalid', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType string | boolean
     event.detail.message;
@@ -520,7 +598,7 @@ tagify.on('add', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('remove', (event) => {
@@ -530,7 +608,7 @@ tagify.on('remove', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('dblclick', (event) => {
@@ -540,7 +618,7 @@ tagify.on('dblclick', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('edit:beforeUpdate', (event) => {
@@ -550,7 +628,7 @@ tagify.on('edit:beforeUpdate', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('edit:updated', (event) => {
@@ -560,14 +638,21 @@ tagify.on('edit:updated', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('input', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
-    // $ExpectType string
-    event.detail.textContent;
+    if ("textContent" in event.detail) {
+        // $ExpectType string
+        event.detail.textContent;
+    } else {
+        // $ExpectType string
+        event.detail.value;
+        // $ExpectType HTMLInputElement | HTMLTextAreaElement
+        event.detail.inputElm;
+    }
 });
 tagify.on('click', (event) => {
     // $ExpectType TagData
@@ -576,19 +661,19 @@ tagify.on('click', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType MouseEvent
     event.detail.event;
 });
 tagify.on('keydown', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType KeyboardEvent
     event.detail.event;
 });
 tagify.on('edit:keydown', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType KeyboardEvent
     event.detail.event;
@@ -596,13 +681,13 @@ tagify.on('edit:keydown', (event) => {
 tagify.on('focus', (event) => {
     // $ExpectType Element
     event.detail.relatedTarget;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('blur', (event) => {
     // $ExpectType Element
     event.detail.relatedTarget;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('edit:start', (event) => {
@@ -612,7 +697,7 @@ tagify.on('edit:start', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType boolean
     event.detail.isValid;
@@ -624,7 +709,7 @@ tagify.on('edit:input', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType Event
     event.detail.event;
@@ -632,29 +717,29 @@ tagify.on('edit:input', (event) => {
 tagify.on('dropdown:show', (event) => {
     // $ExpectType HTMLElement | null
     event.detail.parentElement;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('dropdown:hide', (event) => {
     // $ExpectType HTMLElement | null
     event.detail.parentElement;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('dropdown:updated', (event) => {
     // $ExpectType HTMLElement | null
     event.detail.parentElement;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('dropdown:scroll', (event) => {
     // $ExpectType number
     event.detail.percentage;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.on('dropdown:select', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType TagData
     event.detail.data;
@@ -663,13 +748,13 @@ tagify.on('dropdown:select', (event) => {
 });
 
 tagify.off('change', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType string
     event.detail.value;
 });
 tagify.off('dropdown:noMatch', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType string
     event.detail.value;
@@ -681,7 +766,7 @@ tagify.off('invalid', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType string | boolean
     event.detail.message;
@@ -693,7 +778,7 @@ tagify.off('add', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('remove', (event) => {
@@ -703,7 +788,7 @@ tagify.off('remove', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('dblclick', (event) => {
@@ -713,7 +798,7 @@ tagify.off('dblclick', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('edit:beforeUpdate', (event) => {
@@ -723,7 +808,7 @@ tagify.off('edit:beforeUpdate', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('edit:updated', (event) => {
@@ -733,14 +818,21 @@ tagify.off('edit:updated', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('input', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
-    // $ExpectType string
-    event.detail.textContent;
+    if ("textContent" in event.detail) {
+        // $ExpectType string
+        event.detail.textContent;
+    } else {
+        // $ExpectType HTMLInputElement | HTMLTextAreaElement
+        event.detail.inputElm;
+        // $ExpectType string
+        event.detail.value;
+    }
 });
 tagify.off('click', (event) => {
     // $ExpectType TagData
@@ -749,19 +841,19 @@ tagify.off('click', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType MouseEvent
     event.detail.event;
 });
 tagify.off('keydown', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType KeyboardEvent
     event.detail.event;
 });
 tagify.off('edit:keydown', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType KeyboardEvent
     event.detail.event;
@@ -769,13 +861,13 @@ tagify.off('edit:keydown', (event) => {
 tagify.off('focus', (event) => {
     // $ExpectType Element
     event.detail.relatedTarget;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('blur', (event) => {
     // $ExpectType Element
     event.detail.relatedTarget;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('edit:start', (event) => {
@@ -785,7 +877,7 @@ tagify.off('edit:start', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType boolean
     event.detail.isValid;
@@ -797,7 +889,7 @@ tagify.off('edit:input', (event) => {
     event.detail.index;
     // $ExpectType HTMLElement
     event.detail.tag;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType Event
     event.detail.event;
@@ -805,29 +897,29 @@ tagify.off('edit:input', (event) => {
 tagify.off('dropdown:show', (event) => {
     // $ExpectType HTMLElement | null
     event.detail.parentElement;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('dropdown:hide', (event) => {
     // $ExpectType HTMLElement | null
     event.detail.parentElement;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('dropdown:updated', (event) => {
     // $ExpectType HTMLElement | null
     event.detail.parentElement;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('dropdown:scroll', (event) => {
     // $ExpectType number
     event.detail.percentage;
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
 });
 tagify.off('dropdown:select', (event) => {
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType TagData
     event.detail.data;
@@ -835,18 +927,43 @@ tagify.off('dropdown:select', (event) => {
     event.detail.elm;
 });
 
+modeTagifyNormal.on("input", ({ detail }) => {
+    // $ExpectType Tagify<TagData, null>
+    detail.tagify;
+    // $ExpectType HTMLInputElement | HTMLTextAreaElement
+    detail.inputElm;
+    // $ExpectType string
+    detail.value;
+});
+
+modeTagifySelect.on("input", ({ detail }) => {
+    // $ExpectType Tagify<TagData, "select">
+    detail.tagify;
+    // $ExpectType HTMLInputElement | HTMLTextAreaElement
+    detail.inputElm;
+    // $ExpectType string
+    detail.value;
+});
+
+modeTagifyMix.on("input", ({ detail }) => {
+    // $ExpectType Tagify<TagData, "mix">
+    detail.tagify;
+    // $ExpectType string
+    detail.textContent;
+});
+
 typedTagify.on('click', (event) => {
     // $ExpectType MyTagData
     event.detail.data;
 });
 typedTagify.on('edit:start', (event) => {
-    // $ExpectType Tagify<MyTagData>
+    // $ExpectType Tagify<MyTagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType MyTagData
     event.detail.data;
 });
 typedTagify.on('dropdown:select', (event) => {
-    // $ExpectType Tagify<MyTagData>
+    // $ExpectType Tagify<MyTagData, TagifyMode>
     event.detail.tagify;
     // $ExpectType MyTagData
     event.detail.data;
@@ -920,15 +1037,15 @@ if (tagElement !== undefined) {
     tagify.tagData(tagElement, { value: 'bar' });
     tagify.tagData(tagElement, { value: 'bar' }, false);
     tagify.tagData(tagElement, { value: 'bar' }, true);
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     tagify.editTag();
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     tagify.editTag(tagElement);
     // $ExpectType HTMLElement
     tagify.getTagTextNode(tagElement);
     tagify.setTagTextNode(tagElement, '<i>New text</i>');
     tagify.replaceTag(tagElement, { value: 'bar' });
-    // $ExpectType Tagify<TagData>
+    // $ExpectType Tagify<TagData, TagifyMode>
     tagify.tagLoading(tagElement, true);
 }
 tagify.loading(true);
@@ -956,7 +1073,7 @@ const newTag = tagify.createTagElem({ value: 'hello' });
 // @ts-expect-error
 typedTagify.createTagElem({ value: 'hello' });
 typedTagify.createTagElem({ value: 'hello', title: "", name: "", active: false });
-// $ExpectType Tagify<TagData>
+// $ExpectType Tagify<TagData, TagifyMode>
 tagify.injectAtCaret(newTag);
 tagify.placeCaretAfterNode(newTag);
 tagify.insertAfterTag(newTag, 'world');
