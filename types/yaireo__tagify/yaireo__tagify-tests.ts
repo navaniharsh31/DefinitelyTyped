@@ -1,5 +1,5 @@
 import Tagify = require('@yaireo/tagify');
-import { BaseTagData, TagData, TagifyConstructorSettings, TagifyRuntimeSettings, TagifySettings } from '@yaireo/tagify';
+import { BaseTagData, TagData, TagifySettingsWithMode, TagifyRuntimeSettings, TagifySettings } from '@yaireo/tagify';
 
 export function tagTemplate(this: Tagify, tagData: TagData, { settings }: Tagify): string {
     return `
@@ -556,12 +556,41 @@ const instanceSettings: TagifyRuntimeSettings = {
     disabled: false,
 };
 
+const mixedSettings: TagifySettingsWithMode<TagData, "mix"> = { mode: "mix" };
+const mixedTagify1 = new Tagify<TagData, "mix">(inputElement, mixedSettings);
+const mixedTagify2 = new Tagify(inputElement, mixedSettings);
+
+const nullSettings: TagifySettingsWithMode<TagData, null> = { mode: null };
+const nullTagify1 = new Tagify<TagData, null>(inputElement, nullSettings);
+const nullTagify2 = new Tagify(inputElement, nullSettings);
+
+const undefinedSettings: TagifySettings<TagData, undefined> = { mode: undefined };
+const undefinedTagify1 = new Tagify<TagData, undefined>(inputElement, undefinedSettings);
+const undefinedTagify2 = new Tagify(inputElement, undefinedSettings);
+
+const selectSettings: TagifySettingsWithMode<TagData, "select"> = { mode: "select" };
+const selectTagify1 = new Tagify<TagData, "select">(inputElement, selectSettings);
+const selectTagify2 = new Tagify(inputElement, selectSettings);
+
 const tagArray: TagData[] = tagify.value;
 const scopeEl: HTMLElement = tagify.DOM.scope;
 const spanEl: HTMLSpanElement = tagify.DOM.input;
 const dropdownEl: HTMLDivElement = tagify.DOM.dropdown;
 const inputEl: HTMLInputElement | HTMLTextAreaElement = tagify.DOM.originalInput;
 const invalidPatternMessage = tagify.TEXTS.pattern;
+
+// $ExpectType Tagify<TagData, "mix">
+const inferMix = new Tagify(inputEl, { mode: "mix" });
+// $ExpectType Tagify<TagData, "select">
+const inferSelect = new Tagify(inputEl, { mode: "select" });
+// $ExpectType Tagify<TagData, null>
+const inferNull = new Tagify(inputEl, { mode: null });
+// $ExpectType Tagify<TagData, undefined>
+const inferUndefined = new Tagify(inputEl, { mode: undefined });
+// $ExpectType Tagify<TagData, TagifyMode>
+const inferAll1 = new Tagify(inputEl);
+// $ExpectType Tagify<TagData, TagifyMode>
+const inferAll2 = new Tagify(inputEl, {});
 
 if (tagify.suggestedListItems !== undefined) {
     const item: TagData = tagify.suggestedListItems[0];

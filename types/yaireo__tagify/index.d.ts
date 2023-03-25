@@ -658,13 +658,26 @@ declare namespace Tagify {
     interface Hooks<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends Partial<HooksRuntime<T, M>> { }
 
     /**
+     * Setting object with the `mode` property.
+     * @template M Tagify mode. See the Tagify class for more details.
+     */
+    interface TagifyModeSetting<M extends TagifyMode = TagifyMode> {
+        /**
+         * Use `select` for single-value dropdown-like select box.
+         * See `mix` as value to allow mixed-content. The `pattern` setting must be set to some character.
+         * @default undefined
+         */
+        mode: M;
+    }
+
+    /**
      * Settings that are available after the tagify instance was created.
      * Includes a few extra properties that are not available when creating a
      * new instance. These are also passed to several callback methods.
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface TagifyCoreSettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
+    interface TagifyBaseSettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
          * No user-interaction (add / remove / edit) is allowed when `true`.
          */
@@ -697,13 +710,6 @@ declare namespace Tagify {
          * @default null
          */
         pattern: string | RegExp | null;
-
-        /**
-         * Use `select` for single-value dropdown-like select box.
-         * See `mix` as value to allow mixed-content. The `pattern` setting must be set to some character.
-         * @default null
-         */
-        mode: M;
 
         /**
          * Interpolation for mix mode. Everything between these will become a
@@ -880,6 +886,15 @@ declare namespace Tagify {
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
+    interface TagifyCoreSettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagifyBaseSettings<T, M>, TagifyModeSetting<M> { }
+
+    /**
+     * Settings that are available after the tagify instance was created.
+     * Includes a few extra properties that are not available when creating a
+     * new instance. These are also passed to several callback methods.
+     * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
+     */
     interface TagifyRuntimeSettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagifyCoreSettings<T, M> {
         /**
          * Adds a required attribute to the Tagify wrapper element. Does nothing
@@ -944,13 +959,19 @@ declare namespace Tagify {
     }
 
     /**
-     * Settings that are available after the tagify instance was created.
-     * Includes a few extra properties that are not available when creating a
-     * new instance. These are also passed to several callback methods.
+     * Settings for creating a new tagify instance.
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface TagifySettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends Partial<TagifyCoreSettings<T, M>> {
+    interface TagifySettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends Partial<TagifySettingsWithMode<T, M>> {
+    }
+
+    /**
+     * Settings for creating a new tagify instance, with a required mode setting.
+     * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
+     */
+    interface TagifySettingsWithMode<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends Partial<TagifyBaseSettings<T, M>>, TagifyModeSetting<M> {
         /**
          * Functions that return template strings. Can be used to customize how
          * tags, drop down menus etc. are rendered.
@@ -1599,23 +1620,23 @@ declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Ta
      */
     constructor(
         inputElement: HTMLInputElement | HTMLTextAreaElement,
-        // the & ... bit is a hack to force the mode to be
-        // required when the mode does not include "undefined"
-        settings: Tagify.TagifySettings<T, M> & ([undefined] extends [M] ? {} : { mode: M })
+        // Force the mode to be required when the mode type
+        // parameter M does not include "undefined"
+        settings: [undefined] extends [M] ? Tagify.TagifySettings<T, M> : Tagify.TagifySettingsWithMode<T, M>
     );
 
     /**
      * Creates a new tagify editor on the given input element.
      *
-     * This is the constructor with an optional settings object. The mode type
-     * parameter `M` must be set to `undefined` (or include `undefined) for
+     * This is the constructor without an optional settings object. The mode
+     * type parameter `M` must be set to `undefined` (or include `undefined) for
      * this constructor to be allowed.
      * @param inputElement Input or textarea element to convert into a tagify
      * editor.
      */
     constructor(
         // the & ... bit is a hack to disallow this constructor with optional
-        // settings when the mode does not include "undefined"
+        // settings when the mode type parameter M does not include "undefined"
         inputElement: (HTMLInputElement | HTMLTextAreaElement) & ([undefined] extends [M] ? unknown : never)
     );
 
