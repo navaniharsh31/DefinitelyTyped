@@ -1287,6 +1287,7 @@ declare namespace Tagify {
      */
     interface InputBaseEventData {
         inputElm: HTMLInputElement | HTMLTextAreaElement;
+        isValid: boolean;
         value: string;
     }
 
