@@ -1612,7 +1612,6 @@ declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Ta
      * this constructor to be allowed.
      * @param inputElement Input or textarea element to convert into a tagify
      * editor.
-     * @param settings Optional settings to configure the tagify editor.
      */
     constructor(
         // the & ... bit is a hack to disallow this constructor with optional
