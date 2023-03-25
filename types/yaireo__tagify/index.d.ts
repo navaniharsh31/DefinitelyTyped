@@ -9,25 +9,27 @@ declare namespace Tagify {
      * Mode for how tags are displayed and how they can be edited:
      * - `select`: Single-value dropdown-like select box.
      * - `mix`: Allow mixed-content. Requires the `pattern` setting to be set.
+     * - `null` or `undefined`: Standard mode, only tags can be added.
      */
     type TagifyMode = 'select' | 'mix' | undefined | null;
 
     /**
      * Resolves a mode-specific type by creating a new type depending on the
      * value of the given mode `M`.
+     *
      * Checks whether (1)  `M` is a sub type of `[null | undefined]`, (2)
      * whether `M` is a sub type `'mix'`, and (3) whether `M` is a sub type of
      * `'select'`.
      *
      * Returns `Normal` if only the first condition holds true, `Mix` if only
      * the second condition holds true, `Select` if only the third condition
-     * holds true, `Other` if neither condition holds
-     * true, and `never` if all conditions hold true.
+     * holds true, `Other` if neither condition holds true, and `never` if all
+     * conditions hold true.
      */
     type ModeSpecific<M extends TagifyMode, Normal, Select, Mix, Other> =
         [M] extends [never]
         ? never
-        : [M] extends ["mix"]
+        : [M] extends ['mix']
         ? Mix
         : [M] extends ['select']
         ? Select
@@ -445,6 +447,7 @@ declare namespace Tagify {
     /**
      * Render functions for the template feature at runtime.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface TemplatesRuntime<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
@@ -549,12 +552,14 @@ declare namespace Tagify {
      * Render functions for the template feature that can be configured via the
      * `templates` option of the settings that are passed to tagify.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface Templates<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends Partial<TemplatesRuntime<T, M>> { }
 
     /**
      * Data passed with suggestionClick hook {@link Hooks.suggestionClick}.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface SuggestionClickData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
@@ -574,6 +579,7 @@ declare namespace Tagify {
     /**
      * Data passed with beforePaste hook {@link Hooks.beforePaste}.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface BeforePasteData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
@@ -593,6 +599,7 @@ declare namespace Tagify {
     /**
      * Promise-based hooks for async program flow scenarios at runtime.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface HooksRuntime<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
@@ -646,6 +653,7 @@ declare namespace Tagify {
      *
      * See also the `hooks` option of the settings that are passed to tagify.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface Hooks<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends Partial<HooksRuntime<T, M>> { }
 
@@ -654,6 +662,7 @@ declare namespace Tagify {
      * Includes a few extra properties that are not available when creating a
      * new instance. These are also passed to several callback methods.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface TagifyCoreSettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
@@ -869,6 +878,7 @@ declare namespace Tagify {
      * Includes a few extra properties that are not available when creating a
      * new instance. These are also passed to several callback methods.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface TagifyRuntimeSettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagifyCoreSettings<T, M> {
         /**
@@ -938,6 +948,7 @@ declare namespace Tagify {
      * Includes a few extra properties that are not available when creating a
      * new instance. These are also passed to several callback methods.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface TagifySettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends Partial<TagifyCoreSettings<T, M>> {
         /**
@@ -995,6 +1006,7 @@ declare namespace Tagify {
      * to modify how the tagify component behaves.
      * @deprecated Just use {@link TagifySettings}.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface TagifyConstructorSettings<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagifySettings<T, M> { }
 
@@ -1030,6 +1042,7 @@ declare namespace Tagify {
     /**
      * Base event data common to all events.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface EventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
@@ -1042,6 +1055,7 @@ declare namespace Tagify {
      * Event data with a single parameter. When a non-object value is passed to
      * trigger, it is wrapped in this object.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      * @template S Type of the value provided by this event.
      */
     interface SingleEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode, S = unknown> extends EventData<T, M> {
@@ -1051,6 +1065,7 @@ declare namespace Tagify {
     /**
      * Event data relating to a single tag.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface TagEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M> {
         data?: T | undefined;
@@ -1061,6 +1076,7 @@ declare namespace Tagify {
     /**
      * Event data for events triggered by DOM events.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      * @template E Type of the original event wrapped by this event.
      */
     interface DomEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode, E extends Event = Event> extends EventData<T, M> {
@@ -1070,12 +1086,14 @@ declare namespace Tagify {
     /**
      * Event data for keyboard related events.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface KeyboardEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends DomEventData<T, M, KeyboardEvent> { }
 
     /**
      * Event data for when the element receives or loses focus.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface FocusChangeEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M> {
         relatedTarget: Element;
@@ -1084,30 +1102,35 @@ declare namespace Tagify {
     /**
      * Event data for events related to the dropdown feature.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DropDownEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends HTMLDivElement, EventData<T, M> { }
 
     /**
      * A tag has been added.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface AddEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> { }
 
     /**
      * The component lost focus.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface BlurEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends FocusChangeEventData<T, M> { }
 
     /**
      * Any change to the value has occurred.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface ChangeEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends SingleEventData<T, M, string> { }
 
     /**
      * Clicking a tag.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface ClickEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends DomEventData<T, M, MouseEvent>, TagEventData<T, M> {
         data: T;
@@ -1117,12 +1140,14 @@ declare namespace Tagify {
     /**
      * Double-clicking a tag.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DoubleClickEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> { }
 
     /**
      * Suggestions dropdown has been removed from the DOM.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DropDownHideEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends DropDownEventData<T, M> { }
 
@@ -1130,6 +1155,7 @@ declare namespace Tagify {
      * Suggestions dropdown is to be rendered. The dropdown DOM node is
      * passed in the callback.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DropDownShowEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends DropDownEventData<T, M> { }
 
@@ -1137,6 +1163,7 @@ declare namespace Tagify {
      * When the dropdown menu is open and its items were recomputed via
      * `Tagify.refilter`.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DropDownUpdatedEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends DropDownEventData<T, M> { }
 
@@ -1145,12 +1172,14 @@ declare namespace Tagify {
      * it is possible to manually set `suggestedListItems` to any possible
      * custom value, for example: `[{ value:"default" }]`.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DropDownNoMatchEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends SingleEventData<T, M, string> { }
 
     /**
      * Suggestions dropdown item selected (by mouse / keyboard/ touch).
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DropDownSelectEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M> {
         data: T;
@@ -1161,6 +1190,7 @@ declare namespace Tagify {
     /**
      * Tells the percentage scrolled. (`event.detail.percentage`).
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface DropDownScrollEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M> {
         percentage: number;
@@ -1169,12 +1199,14 @@ declare namespace Tagify {
     /**
      * Just before a tag has been updated, while still in "edit" mode.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface EditBeforeUpdateEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> { }
 
     /**
      * Typing inside an edited tag.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface EditInputEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> {
         data: T & { newValue: string };
@@ -1185,12 +1217,14 @@ declare namespace Tagify {
     /**
      * Keydown event while an edited tag is in focus
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface EditKeydownEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends KeyboardEventData<T, M> { }
 
     /**
      * A tag is now in "edit mode".
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface EditStartEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> {
         data: T;
@@ -1202,18 +1236,21 @@ declare namespace Tagify {
      * A tag as been updated (changed view editing or by directly calling
      * the `replaceTag` method).
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface EditUpdatedEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> { }
 
     /**
      * The component has received focus.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface FocusEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends FocusChangeEventData<T, M> { }
 
     /**
      * A tag has been added but did not pass validation.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface InvalidTagEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> {
         data: T;
@@ -1244,45 +1281,52 @@ declare namespace Tagify {
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface InputEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventData {
-    }
+    interface InputEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventData { }
 
     /**
      * For normal mode: Input event, when a tag is being typed / edited.
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface InputEventDataSelect<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventData {
-    }
+    interface InputEventDataSelect<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventData { }
 
     /**
      * For mix mode: Input event, when a tag is being typed / edited.
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface InputEventDataMix<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventDataMix {
-    }
+    interface InputEventDataMix<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, InputBaseEventDataMix { }
 
     /**
      * For undecided mode: Input event, when a tag is being typed / edited.
      * @template T Type of the tag data. See the Tagify class for more details.
      * @template M Tagify mode. See the Tagify class for more details.
      */
-    interface InputEventDataOther<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends EventData<T, M>, Partial<InputBaseEventData>, Partial<InputBaseEventDataMix> {
-    }
+    interface InputEventDataOther<
+        T extends BaseTagData = TagData,
+        M extends TagifyMode = TagifyMode
+    > extends EventData<T, M>, Partial<InputBaseEventData>, Partial<InputBaseEventDataMix> { }
 
     /**
      * When tagify input has focus and a key was pressed.
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface KeydownEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends KeyboardEventData<T, M> { }
 
     /**
      * A tag has been removed (use `removeTag` instead with jQuery).
      * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
      */
     interface RemoveEventData<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> extends TagEventData<T, M> { }
 
+    /**
+     * Maps the names of the various custom events emitted by Tagify to the data
+     * provided by those events.
+     * @template T Type of the tag data. See the Tagify class for more details.
+     * @template M Tagify mode. See the Tagify class for more details.
+     */
     interface EventDataMap<T extends BaseTagData = TagData, M extends TagifyMode = TagifyMode> {
         /**
          * A tag has been added.
@@ -1377,7 +1421,11 @@ declare namespace Tagify {
         'focus': FocusEventData<T, M>;
 
         /**
-         * Input event, when a tag is being typed / edited.
+         * Input event, when a tag is being typed / edited. Note that the
+         * available event data depend on the Tagify mode, encoded by the mode
+         * type parameter `M`. Normally the data contains an `inputElm` and
+         * `value` property, but for mix mode, it contains only a `textContent`
+         * property.
          */
         'input': ModeSpecific<M, InputEventData<T, M>, InputEventDataSelect<T, M>, InputEventDataMix<T, M>, InputEventDataOther<T, M>>;
 
@@ -1464,6 +1512,13 @@ declare namespace Tagify {
  * arbitrary properties. To enjoy more type safety, extend from
  * {@link Tagify.BaseTagData}, specify the allowed properties and use that as
  * the type parameter.
+ * @template M Tagify mode. The mode controls how tagify behaves and also changes
+ * various typings. The default for this type parameter is a union of all
+ * possible modes. TypeScript will infer the mode for you if you set the `mode`
+ * explicitly. If you omit the `mode` setting or do not specify any settings at
+ * all, you should set this type parameter to `undefined` explicitly. So either
+ * use `new Tagify(el, {settings:{mode:undefined}})` or
+ * `new Tagify<MyTagData, undefined>(el)`.
  */
 declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Tagify.TagifyMode = Tagify.TagifyMode> {
     /**
@@ -1534,6 +1589,10 @@ declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Ta
 
     /**
      * Creates a new tagify editor on the given input element.
+     *
+     * This is the constructor with a required settings object. That settings
+     * object must also include a `mode` which matches the declared mode type
+     * parameter `M`.
      * @param inputElement Input or textarea element to convert into a tagify
      * editor.
      * @param settings Settings to configure the tagify editor.
@@ -1547,6 +1606,10 @@ declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Ta
 
     /**
      * Creates a new tagify editor on the given input element.
+     *
+     * This is the constructor with an optional settings object. The mode type
+     * parameter `M` must be set to `undefined` (or include `undefined) for
+     * this constructor to be allowed.
      * @param inputElement Input or textarea element to convert into a tagify
      * editor.
      * @param settings Optional settings to configure the tagify editor.
