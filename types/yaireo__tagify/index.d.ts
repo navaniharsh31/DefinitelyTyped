@@ -1617,8 +1617,7 @@ declare class Tagify<T extends Tagify.BaseTagData = Tagify.TagData, M extends Ta
     constructor(
         // the & ... bit is a hack to disallow this constructor with optional
         // settings when the mode does not include "undefined"
-        inputElement: (HTMLInputElement | HTMLTextAreaElement) & ([undefined] extends [M] ? unknown : never),
-        settings?: Tagify.TagifySettings<T, M>
+        inputElement: (HTMLInputElement | HTMLTextAreaElement) & ([undefined] extends [M] ? unknown : never)
     );
 
     /**
